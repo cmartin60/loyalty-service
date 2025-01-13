@@ -81,9 +81,9 @@ app.post("/api/customers/:id/purchase", (req: Request, res: Response): void => {
 
     //created a multiplier based on status level
     let pointMultiplier = 1; //default multiplier
-    if (customer.status == "GOLD") {
+    if (customer.status === "GOLD") {
         pointMultiplier = 1.2;
-    } else if (customer.status == "PLATINUM") {
+    } else if (customer.status === "PLATINUM") {
         pointMultiplier = 2;
     }
     
