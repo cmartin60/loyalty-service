@@ -37,18 +37,6 @@ const customers: Customer[] = [
 		joinDate: "2023-01-20",
 		notifications: false,
 	},
-    {
-        id: 3,
-        name: "Christian Martin",
-        status: "PLATINUM",
-        points: 10,
-        lastPurchaseDate: "",
-        email: "cmartin60@rrc.ca",
-        preferredStore: "",
-        joinDate: "2024-01,13",
-        notifications: false,
-        lastStatusChange: "",
-    },
 ];
 
 const app: Express = express();
@@ -91,7 +79,16 @@ app.post("/api/customers/:id/purchase", (req: Request, res: Response): void => {
 	const purchaseAmount: number = req.body.amount;
 	const storeLocation: string = req.body.storeLocation;
 
-	customer.points += Math.floor(purchaseAmount / 10);
+    //created a multiplier based on status level
+    let pointMultiplier = 1; //default multiplier
+    if (customer.status == "GOLD") {
+        pointMultiplier = 1.2;
+    } else if (customer.status == "PLATINUM") {
+        pointMultiplier = 2;
+    }
+    
+    // added the point multiplier for each purchases based on status level
+	customer.points += Math.floor(purchaseAmount / 10) * pointMultiplier;
 	customer.lastPurchaseDate = new Date().toISOString();
 
 	if (customer.points >= 750) {
