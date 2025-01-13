@@ -6,7 +6,7 @@ import express, { Request, Response, Express } from "express";
 interface Customer {
 	id: number;
 	name: string;
-	status: "GOLD" | "SILVER" | "BRONZE";
+	status: "PLATINUM" | "GOLD" | "SILVER" | "BRONZE";
 	points: number;
 	lastPurchaseDate: string;
 	email?: string;
@@ -37,6 +37,18 @@ const customers: Customer[] = [
 		joinDate: "2023-01-20",
 		notifications: false,
 	},
+    {
+        id: 3,
+        name: "Christian Martin",
+        status: "PLATINUM",
+        points: 10,
+        lastPurchaseDate: "",
+        email: "cmartin60@rrc.ca",
+        preferredStore: "",
+        joinDate: "2024-01,13",
+        notifications: false,
+        lastStatusChange: "",
+    },
 ];
 
 const app: Express = express();
@@ -88,7 +100,10 @@ app.post("/api/customers/:id/purchase", (req: Request, res: Response): void => {
 	} else if (customer.points >= 500) {
 		customer.status = "SILVER";
 		customer.lastStatusChange = new Date().toISOString();
-	}
+	} else if (customer.points >= 1000) {
+        customer.status = "PLATINUM";
+        customer.lastStatusChange = new Date().toISOString();
+    }
 
 	res.json(customer);
 });
