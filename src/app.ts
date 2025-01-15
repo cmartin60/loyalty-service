@@ -92,13 +92,13 @@ app.post("/api/customers/:id/purchase", (req: Request, res: Response): void => {
 	customer.lastPurchaseDate = new Date().toISOString();
 
 	if (customer.points >= 750) {
-		customer.status = "GOLD";
+		customer.status === "GOLD";
 		customer.lastStatusChange = new Date().toISOString();
 	} else if (customer.points >= 500) {
-		customer.status = "SILVER";
+		customer.status === "SILVER";
 		customer.lastStatusChange = new Date().toISOString();
 	} else if (customer.points >= 1000) {
-        customer.status = "PLATINUM";
+        customer.status === "PLATINUM";
         customer.lastStatusChange = new Date().toISOString();
     }
 
@@ -130,6 +130,7 @@ app.patch(
 			customer.preferredStore = req.body.preferredStore;
 		}
 		if (typeof req.body.email === "string") {
+			
 			customer.email = req.body.email;
 		}
 
