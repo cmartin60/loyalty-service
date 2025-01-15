@@ -116,13 +116,18 @@ app.patch(
 			return;
 		}
 		if (typeof req.body.notifications === "boolean") {
+			// Legacy customer without emails are not eligible for notifications
+			if (!customer.email && req.body.notifications) {
+				res.status(400).send("Customer without emails are not eligible for notification-based features");
+			  }
+
 			customer.notifications = req.body.notifications;
 		}
 		if (typeof req.body.preferredStore === "string") {
 			customer.preferredStore = req.body.preferredStore;
 		}
 		if (typeof req.body.email === "string") {
-			
+
 			// Validate email format
 			const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(req.body.email);
 
