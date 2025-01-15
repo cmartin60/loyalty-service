@@ -75,6 +75,11 @@ app.post("/api/customers/:id/purchase", (req: Request, res: Response): void => {
 		res.status(404).send("Customer not found");
 		return;
 	}
+	// Check if customer has an email
+	if (!customer.email) {
+		res.status(400).send("Email is required to view purchase history");
+		return;
+	  }
 
 	const purchaseAmount: number = req.body.amount;
 	const storeLocation: string = req.body.storeLocation;
@@ -110,7 +115,6 @@ app.patch(
 			res.status(404).send("Customer not found");
 			return;
 		}
-
 		if (typeof req.body.notifications === "boolean") {
 			customer.notifications = req.body.notifications;
 		}
@@ -118,8 +122,10 @@ app.patch(
 			customer.preferredStore = req.body.preferredStore;
 		}
 		if (typeof req.body.email === "string") {
+			
 			// Validate email format
 			const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(req.body.email);
+
 			if (!isValidEmail) {
 				res.status(400).send("Invalid email address");
 				return;
@@ -129,6 +135,7 @@ app.patch(
 			const isDuplicateEmail = customers.some(
 				(c) => c.email === req.body.email && c.id !== customerId
 			);
+
 			if (isDuplicateEmail) {
 				res.status(400).send("Email must be unique");
 				return;
