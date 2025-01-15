@@ -118,6 +118,22 @@ app.patch(
 			customer.preferredStore = req.body.preferredStore;
 		}
 		if (typeof req.body.email === "string") {
+			// Validate email format
+			const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(req.body.email);
+			if (!isValidEmail) {
+				res.status(400).send("Invalid email address");
+				return;
+			}
+
+			// Check if email is unique and no duplicate with other customer
+			const isDuplicateEmail = customers.some(
+				(c) => c.email === req.body.email && c.id !== customerId
+			);
+			if (isDuplicateEmail) {
+				res.status(400).send("Email must be unique");
+				return;
+			}
+
 			customer.email = req.body.email;
 		}
 
